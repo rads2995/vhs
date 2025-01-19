@@ -25,4 +25,4 @@ WORKDIR /usr/local/src/gem5
 
 RUN scons build/RISCV/gem5.opt -j4
 
-RUN ./build/RISCV/gem5.opt --help
+RUN ./build/RISCV/gem5.opt simple-riscv.py
