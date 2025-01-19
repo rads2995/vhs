@@ -1,5 +1,7 @@
+# Build from Red Hat Universal Base Image
 FROM redhat/ubi9-minimal:latest
 
+# Update packages and install required dependencies to build gem5
 RUN microdnf -y upgrade
 RUN microdnf -y install \
     gcc \
@@ -11,19 +13,21 @@ RUN microdnf -y install \
     zlib-devel \
     git
 
+# Install required Python packages to build gem5
 RUN python3.12 -m pip install scons
 
+# Create symbolic links for gem5's internal calls to Python 3
 RUN ln -s /usr/bin/python3.12 /usr/bin/python3
 RUN ln -s /usr/bin/python3.12-config /usr/bin/python3-config
 
 WORKDIR /usr/local/src
 
-RUN git clone https://github.com/gem5/gem5
+# Clone gem5 forked repository with changes for the PIC64-HPSC processor
+RUN git clone https://github.com/rads2995/gem5.git -b develop
 
 WORKDIR /usr/local/src/gem5
 
+# Build gem5 for the RISC-V ISA with optimizations and debug symbols
 RUN scons build/RISCV/gem5.opt -j `nproc`
 
-COPY . .
-
-RUN ./build/RISCV/gem5.opt simple-riscv.py
+WORKDIR /usr/local/src/
