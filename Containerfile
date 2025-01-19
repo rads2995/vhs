@@ -23,6 +23,6 @@ RUN git clone https://github.com/gem5/gem5
 
 WORKDIR /usr/local/src/gem5
 
-RUN scons build/RISCV/gem5.opt -j4
+RUN scons build/RISCV/gem5.opt -j `nproc`
 
 RUN ./build/RISCV/gem5.opt simple-riscv.py
