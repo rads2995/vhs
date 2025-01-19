@@ -54,6 +54,8 @@ from m5.util.fdthelper import *
 
 from gem5.utils.requires import requires
 
+addToPath("configs")
+
 from common import (
     CacheConfig,
     CpuConfig,
