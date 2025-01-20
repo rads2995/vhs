@@ -1,0 +1,47 @@
+# Build from Red Hat Universal Base Image
+FROM docker.io/ubuntu:latest
+
+# Update packages and install required dependencies for Microchip Buildroot
+RUN apt-get -y update && apt-get -y upgrade
+RUN apt-get -y install \
+    subversion \
+    build-essential \
+    bison \
+    flex \
+    gettext \
+    libncurses5-dev \
+    texinfo \
+    autoconf \
+    automake \
+    libtool \
+    mercurial \
+    git-core \
+    gperf \
+    gawk \
+    expat \
+    curl \
+    cvs \
+    libexpat-dev \
+    bzr \
+    unzip \
+    bc \
+    python3-dev \
+    wget \
+    cpio \
+    rsync \
+    xxd \
+    bmap-tools
+
+WORKDIR /usr/local/src
+
+RUN git clone https://github.com/linux4microchip/buildroot-external-microchip.git
+RUN git clone https://git.busybox.net/buildroot -b 2024.02
+
+WORKDIR /usr/local/src/buildroot
+
+ENV BR2_EXTERNAL=../buildroot-external-microchip/ 
+ENV FORCE_UNSAFE_CONFIGURE=1
+
+RUN make icicle_defconfig
+
+RUN make -j `nproc`
