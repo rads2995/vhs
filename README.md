@@ -1,42 +1,25 @@
-# Digital-Twin
+# Virtual Hardware Simulator (VHS)
 
 ## Build Instructions
 
-To build the Docker image:
+### Build PIC64GX Embedded Image
 
-`docker build --force-rm -t digital_twin . --build-arg ISA=[model]`
+`podman build . --file Containerfile.buildroot --tag buildroot`
 
-where `[model]:` is either `X86`, or `ARM`.
+### Build gem5 (Custom Branch)
 
-To run the Docker container interactively: 
+`podman build . --file Containerfile.gem5 --tag gem5`
 
-`docker run --rm -it  digital_twin:latest`
+## Notes
 
-To run the simulator system (i.e., x86 ISA):
+### PIC64GX1000
 
-`build/X86/gem5.opt configs/test/arm/simple.py`
+- [PIC64-GX 64-bit Microprocessor Data Sheet](https://ww1.microchip.com/downloads/aemDocuments/documents/MPU64/ProductDocuments/DataSheets/PIC64GX1000-64-bit-Microprocessor-Data-Sheet-DS50003724.pdf)
+- [Linux4Microchip GitHub](https://github.com/linux4microchip)
+- [PIC64GX Buildroot configuration](https://github.com/linux4microchip/buildroot-external-microchip/blob/master/configs/pic64gx_curiosity_kit_defconfig)
 
-## Simulation Examples
+## Future Plans
 
-### x86 ISA calling "hello world" binary file
-```
-root@309b55121ae6:/Digital-Twin/gem5# build/X86/gem5.opt configs/test/x86/simple.py 
-gem5 Simulator System.  https://www.gem5.org
-gem5 is copyrighted software; use the --copyright option for details.
+### PIC64-HPSC High-Performance Spaceflight Computing
 
-gem5 version 22.0.0.2
-gem5 compiled Nov 20 2022 19:03:46
-gem5 started Nov 20 2022 19:10:11
-gem5 executing on 309b55121ae6, pid 19
-command line: build/X86/gem5.opt configs/test/x86/simple.py
-
-Global frequency set at 1000000000000 ticks per second
-warn: No dot file generated. Please install pydot to generate the dot file and pdf.
-build/X86/mem/dram_interface.cc:690: warn: DRAM device capacity (8192 Mbytes) does not match the address range assigned (512 Mbytes)
-0: system.remote_gdb: listening for remote gdb on port 7000
-Beginning simulation!
-build/X86/sim/simulate.cc:194: info: Entering event queue @ 0.  Starting simulation...
-Hello world!
-Exiting @ tick 454646000 because exiting with last active thread context
-
-```
+Once release, we want to be able to model the [PIC64-HPSC1000](https://www.microchip.com/en-us/product/pic64-hpsc1000) radiation-hardened MPU.

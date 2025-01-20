@@ -1,7 +1,8 @@
 # Build from Ubuntu image as suggested by Microchip
+# TODO: should migrate to Red Hat Universal Image when possible
 FROM docker.io/ubuntu:latest
 
-# Update packages and install required dependencies for Microchip Buildroot
+# Update packages and install required dependencies for Microchip's Buildroot
 RUN apt-get -y update && apt-get -y upgrade
 RUN apt-get -y install \
     subversion \
@@ -32,19 +33,17 @@ RUN apt-get -y install \
     xxd \
     bmap-tools
 
-WORKDIR /usr/local/src
+# Since we do not need root anymore, switch to normal user
+RUN useradd -m builder
+USER builder
 
 # Clone the required repositories
+WORKDIR /home/builder
 RUN git clone https://github.com/linux4microchip/buildroot-external-microchip.git
 RUN git clone https://git.busybox.net/buildroot -b 2024.02
 
-WORKDIR /usr/local/src/buildroot
-
-# Required environment variables per guide and to build as root in container
+# Target the PIC64GX 64-bit RISC-V quad-core microprocessor
+WORKDIR /home/builder/buildroot
 ENV BR2_EXTERNAL=../buildroot-external-microchip/ 
-ENV FORCE_UNSAFE_CONFIGURE=1
-
-# Target the PIC64GX 64-bit RISC-V quad-core microprocessor for now
 RUN make pic64gx_curiosity_kit_defconfig
-
 RUN make -j `nproc`
