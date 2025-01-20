@@ -25,6 +25,12 @@ WORKDIR /usr/local/src
 # Clone gem5 forked repository with changes for the PIC64-HPSC processor
 RUN git clone https://github.com/rads2995/gem5.git -b develop
 
+WORKDIR /usr/local/src/vhs
+
+COPY . .
+
+RUN ls ./output
+
 WORKDIR /usr/local/src/gem5
 
 # Build gem5 for the RISC-V ISA with optimizations and debug symbols

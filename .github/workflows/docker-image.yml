@@ -14,5 +14,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Containerfile --tag vhs:$(date +%s)
+    - name: Build the buildroot Containerfile image
+      run: docker build . --file Containerfile.buildroot --tag buildroot
+    - name: Copy buildroot artifacts into working directory
+      run: |
+        docker cp buildroot:/usr/local/src/buildroot/output ./output
+        ls ./output
+    - name: Build the gem5 Containerfile image
+      run: docker build . --file Containerfile.gem5 --tag gem5
