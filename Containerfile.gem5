@@ -29,5 +29,3 @@ WORKDIR /usr/local/src/gem5
 
 # Build gem5 for the RISC-V ISA with optimizations and debug symbols
 RUN scons build/RISCV/gem5.opt -j `nproc`
-
-WORKDIR /usr/local/src/
