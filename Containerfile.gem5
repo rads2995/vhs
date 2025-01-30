@@ -14,7 +14,6 @@ RUN microdnf -y install \
     git
 
 # Install required Python packages to build gem5
-# TODO: this should be done at the user-level and with venv
 RUN python3.12 -m pip install scons
 
 # Create symbolic links for gem5's internal calls to Python 3
@@ -24,11 +23,4 @@ RUN ln -s /usr/bin/python3.12-config /usr/bin/python3-config
 # Since we do not need root anymore, switch to normal user
 RUN useradd -m builder
 USER builder
-
-# Clone gem5 forked repository with changes for the PIC64GX1000 processor
 WORKDIR /home/builder
-RUN git clone https://github.com/rads2995/gem5.git -b pic64gx1000
-
-# Build gem5 for the RISC-V ISA with optimizations and debug symbols
-WORKDIR /home/builder/gem5
-RUN scons build/RISCV/gem5.opt -j `nproc`

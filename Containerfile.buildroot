@@ -1,5 +1,4 @@
 # Build from Ubuntu image as suggested by Microchip
-# TODO: should migrate to Red Hat Universal Image when possible
 FROM docker.io/ubuntu:latest
 
 # Update packages and install required dependencies for Microchip's Buildroot
@@ -46,4 +45,4 @@ RUN git clone https://git.busybox.net/buildroot -b 2024.02
 WORKDIR /home/builder/buildroot
 ENV BR2_EXTERNAL=../buildroot-external-microchip/ 
 RUN make pic64gx_curiosity_kit_defconfig
-RUN make -j `nproc`
+RUN make -j6
