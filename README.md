@@ -1,14 +1,20 @@
 # Virtual Hardware Simulator (VHS)
 
-## Build Instructions
+## How to Build
 
 ### Build PIC64GX Embedded Image
 
-`podman build . --file Containerfile.buildroot --tag buildroot`
+`podman build . --file Containerfile.buildroot --tag buildroot:latest`
 
-### Build gem5 (Custom Branch)
+### Build gem5 development environment
 
-`podman build . --file Containerfile.gem5 --tag gem5`
+`podman build . --file Containerfile.gem5 --tag gem5:latest`
+
+## How to Run
+
+### Run gem5 development environment
+
+`podman run --volume=$(pwd)/gem5:/home/builder/gem5:rw,U,Z --userns=keep-id --rm -it gem5:latest`
 
 ## Notes
 
